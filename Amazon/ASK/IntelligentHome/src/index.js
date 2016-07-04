@@ -120,14 +120,14 @@ function handleChangeModelRequest(intent, session, callback) {
 	// TODO: parse response and post to Adafruit RESTful interace.
 	
     var speechOutput = "Model changed to " + intent.slots.Model.value + ".";
-	callback({}, buildSpeechletResponseWithoutCard(speechOutput, false));
+	callback({}, buildSpeechletResponseWithoutCard(speechOutput, true));
 }
 
 function handleRotateCameraRequest(intent, session, callback) {
 	// TODO: parse response and post to Adafruit RESTful interace.
 	
     var speechOutput = "Camera rotated " + intent.slots.Direction.value + ".";
-	callback({}, buildSpeechletResponseWithoutCard(speechOutput, false));
+	callback({}, buildSpeechletResponseWithoutCard(speechOutput, true));
 }
 
 function handleGetHelpRequest(intent, session, callback) {
@@ -143,7 +143,7 @@ function handleGetHelpRequest(intent, session, callback) {
 function handleFinishSessionRequest(intent, session, callback) {
     // End the session with a "Good bye!" if the user wants to quit the game
     callback(session.attributes,
-        buildSpeechletResponseWithoutCard("Good bye!", "", true));
+        buildSpeechletResponseWithoutCard("", true));
 }
 
 // ------- Helper functions to build responses -------
