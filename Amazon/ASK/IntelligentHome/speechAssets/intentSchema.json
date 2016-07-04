@@ -1,6 +1,24 @@
 {
   "intents": [
     {
+      "intent": "ChangeModelIntent",
+      "slots": [
+        {
+          "name": "PlayerName",
+          "type": "LIST_OF_MODELS"
+        }
+      ]
+    },
+    {
+      "intent": "RotateCameraIntent",
+	  "slots": [
+        {
+          "name": "PlayerName",
+          "type": "LIST_OF_CAMERA_DIRECTIONS"
+        }
+      ]
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     },
     {
