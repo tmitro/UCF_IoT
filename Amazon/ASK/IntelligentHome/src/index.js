@@ -111,20 +111,55 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 // ------- Skill specific business logic -------
 
+var AIO_API_URL = 'io.adafruit.com';
+var AIO_KEY = 'b7ee7c04e9214aeab86eae82abc14730';
+var AIO_FEED_KEY = '596538'//'intelligent-home';
+
+const http = require('http');
+
 function getWelcomeResponse(callback) {
     var speechOutput = "Welcome to the intelligent home, how can I assist you?";
     callback({}, buildSpeechletResponseWithoutCard(speechOutput, false));
 }
 
 function handleChangeModelRequest(intent, session, callback) {
-	// TODO: parse response and post to Adafruit RESTful interace.
 	
+	//var payload = buildModelPayload(intent.slots.Model.value);
+	console.log('handleChangeModelRequest, Model: ' + intent.slots.Model.value);
+	var payload = '{"model": ' + intent.slots.Model.value + '}'; //JSON.stringify(payload);
+	var body = '{"value": ' + payload +'}';
+	var path = '/api/feeds/intelligent-home/data?x-aio-key=b7ee7c04e9214aeab86eae82a';
+	
+	var request = new http.ClientRequest({
+		hostname: AIO_API_URL,
+		path: path,
+		method: 'POST',
+		headers: {
+			//"X-AIO-KEY": AIO_KEY,
+			'Content-Type': 'application/json',
+			'Content-Length': Buffer.byteLength(body)
+		}
+	});
+	
+	console.log('handleChangeModelRequest, body:\n ' + body + ', path: ', AIO_API_URL + path);
+	request.end(body);
+	
+	request.on('response', function (response) {
+		console.log('STATUS: ' + response.statusCode);
+		console.log('HEADERS: ' + JSON.stringify(response.headers));
+		response.setEncoding('utf8');
+		response.on('data', function (chunk) {
+			console.log('BODY: ' + chunk);
+	  });
+	});
+
     var speechOutput = "Model changed to " + intent.slots.Model.value + ".";
 	callback({}, buildSpeechletResponseWithoutCard(speechOutput, true));
 }
 
 function handleRotateCameraRequest(intent, session, callback) {
 	// TODO: parse response and post to Adafruit RESTful interace.
+	var payload = buildCameraPayload(intent.slots.Direction.value);
 	
     var speechOutput = "Camera rotated " + intent.slots.Direction.value + ".";
 	callback({}, buildSpeechletResponseWithoutCard(speechOutput, true));
@@ -146,7 +181,19 @@ function handleFinishSessionRequest(intent, session, callback) {
         buildSpeechletResponseWithoutCard("", true));
 }
 
-// ------- Helper functions to build responses -------
+// ------- Helper functions to build payloads and responses -------
+
+function buildModelPayload(title, model, shouldEndSession) { 
+	var obj = {};
+	obj.model = model;
+	return obj;
+}
+
+function buildCameraPayload(title, direction, shouldEndSession) {
+	return {
+        direction: direction
+    };
+}
 
 function buildSpeechletResponse(title, output, shouldEndSession) {
     return {
