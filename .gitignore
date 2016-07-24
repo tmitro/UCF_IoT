@@ -1,0 +1,22 @@
+$PROJDIR
+
+obj
+Temp
+.suo
+.userprefs
+
+$PROJDIR/Library
+
+cache
+metadata
+ScriptAssemblies
+assetDatabase3
+assetservercachev3
+AssetServerCacheV3
+AssetVersioning.db
+expandedItems
+FailedAssetImports.txt
+guidmapper
+ScriptMapper
+unity default resources
+unity editor resources

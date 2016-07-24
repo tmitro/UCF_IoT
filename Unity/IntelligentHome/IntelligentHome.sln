@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentHome.CSharp.Plugins", "IntelligentHome.CSharp.Plugins.csproj", "{F111CE65-B483-0011-E5DD-B579826B6498}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentHome.CSharp", "IntelligentHome.CSharp.csproj", "{F64B2A76-6F18-2B16-76CE-74E75C05B7C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentHome.CSharp.Editor", "IntelligentHome.CSharp.Editor.csproj", "{3E6247C0-3E4B-5458-81CF-C193AECD65BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F111CE65-B483-0011-E5DD-B579826B6498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F111CE65-B483-0011-E5DD-B579826B6498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F111CE65-B483-0011-E5DD-B579826B6498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F111CE65-B483-0011-E5DD-B579826B6498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F64B2A76-6F18-2B16-76CE-74E75C05B7C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F64B2A76-6F18-2B16-76CE-74E75C05B7C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F64B2A76-6F18-2B16-76CE-74E75C05B7C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F64B2A76-6F18-2B16-76CE-74E75C05B7C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E6247C0-3E4B-5458-81CF-C193AECD65BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E6247C0-3E4B-5458-81CF-C193AECD65BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E6247C0-3E4B-5458-81CF-C193AECD65BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E6247C0-3E4B-5458-81CF-C193AECD65BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
