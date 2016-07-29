@@ -4,6 +4,13 @@
  
 'use strict';
 
+var https = require('https');
+var querystring = require('querystring');
+
+var AIO_API_URL = 'io.adafruit.com';
+var AIO_KEY = 'b7ee7c04e9214aeab86eae82abc14730';
+var AIO_FEED_KEY = 'intelligent-home';//'596538'
+
 // Route the incoming request based on type (LaunchRequest, IntentRequest,
 // etc.) The JSON body of the request is provided in the event parameter.
 exports.handler = function (event, context) {
@@ -85,6 +92,9 @@ function onIntent(intentRequest, session, callback) {
     // dispatch custom intents to handlers here
     if ("ChangeModelIntent" === intentName) {
         handleChangeModelRequest(intent, session, callback);
+    } else if ("Yellow" === intentName) {
+        var speechOutput = "Of course, num num num";
+        callback({}, buildSpeechletResponseWithoutCard(speechOutput, false));
     } else if ("RotateCameraIntent" === intentName) {
         handleRotateCameraRequest(intent, session, callback);
     } else if ("AMAZON.HelpIntent" === intentName) {
@@ -111,55 +121,37 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 // ------- Skill specific business logic -------
 
-var AIO_API_URL = 'io.adafruit.com';
-var AIO_KEY = 'b7ee7c04e9214aeab86eae82abc14730';
-var AIO_FEED_KEY = '596538'//'intelligent-home';
-
-const http = require('http');
-
 function getWelcomeResponse(callback) {
     var speechOutput = "Welcome to the intelligent home, how can I assist you?";
     callback({}, buildSpeechletResponseWithoutCard(speechOutput, false));
 }
 
 function handleChangeModelRequest(intent, session, callback) {
-	
-	//var payload = buildModelPayload(intent.slots.Model.value);
 	console.log('handleChangeModelRequest, Model: ' + intent.slots.Model.value);
-	var payload = '{"model": ' + intent.slots.Model.value + '}'; //JSON.stringify(payload);
-	var body = '{"value": ' + payload +'}';
-	var path = '/api/feeds/intelligent-home/data?x-aio-key=b7ee7c04e9214aeab86eae82a';
 	
-	var request = new http.ClientRequest({
-		hostname: AIO_API_URL,
-		path: path,
-		method: 'POST',
-		headers: {
-			//"X-AIO-KEY": AIO_KEY,
-			'Content-Type': 'application/json',
-			'Content-Length': Buffer.byteLength(body)
-		}
-	});
-	
-	console.log('handleChangeModelRequest, body:\n ' + body + ', path: ', AIO_API_URL + path);
-	request.end(body);
-	
-	request.on('response', function (response) {
-		console.log('STATUS: ' + response.statusCode);
-		console.log('HEADERS: ' + JSON.stringify(response.headers));
-		response.setEncoding('utf8');
-		response.on('data', function (chunk) {
-			console.log('BODY: ' + chunk);
-	  });
-	});
+	var path = '/api/feeds/' + AIO_FEED_KEY + '/data?x-aio-key=' + AIO_KEY;
+	var payload = buildModelPayload(intent.slots.Model.value);
+    var data = querystring.stringify({
+        payload
+        //'model' : intent.slots.Model.value
+    });
 
+    postRequest(path, data);
+	
     var speechOutput = "Model changed to " + intent.slots.Model.value + ".";
 	callback({}, buildSpeechletResponseWithoutCard(speechOutput, true));
 }
 
 function handleRotateCameraRequest(intent, session, callback) {
-	// TODO: parse response and post to Adafruit RESTful interace.
+	console.log('handleRotateCameraRequest, Direction: ' + intent.slots.Direction.value);
+	
+	var path = '/api/feeds/' + AIO_FEED_KEY + '/data?x-aio-key=' + AIO_KEY;
 	var payload = buildCameraPayload(intent.slots.Direction.value);
+    var data = querystring.stringify({
+        payload
+    });
+
+    postRequest(path, data);
 	
     var speechOutput = "Camera rotated " + intent.slots.Direction.value + ".";
 	callback({}, buildSpeechletResponseWithoutCard(speechOutput, true));
@@ -181,7 +173,34 @@ function handleFinishSessionRequest(intent, session, callback) {
         buildSpeechletResponseWithoutCard("", true));
 }
 
-// ------- Helper functions to build payloads and responses -------
+// ------- Helper functions for HTTP requests and to build payloads and responses -------
+
+function postRequest(path, data) {
+        
+    // An object of options to indicate where to post to
+    var postOptions = {
+        host: AIO_API_URL,
+        path: path,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(data),
+		    "X-AIO-KEY": AIO_KEY
+        }
+    };
+      
+    // Set up the request
+    var postRequest = https.request(postOptions, function(res) {
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) {
+            console.log('Response: ' + chunk);
+      });
+    });
+    
+    // Post the data
+    postRequest.write(data);
+    postRequest.end();
+}
 
 function buildModelPayload(title, model, shouldEndSession) { 
 	var obj = {};
