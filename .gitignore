@@ -5,11 +5,12 @@ Temp
 .suo
 .userprefs
 
-$PROJDIR/Library
+$PROJDIR/Unity/IntelligentHome/Library
 
 cache
 metadata
 ScriptAssemblies
+ShaderCache
 assetDatabase3
 assetservercachev3
 AssetServerCacheV3
@@ -20,3 +21,4 @@ guidmapper
 ScriptMapper
 unity default resources
 unity editor resources
+shadercompiler*
